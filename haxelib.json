@@ -1,0 +1,15 @@
+{
+    "name": "hxmemcache",
+    "url": "https://github.com/influrium/hxmemcache",
+    "license": "MIT",
+    "classPath": "src",
+    "tags":["db","memcache","client"],
+    "description": "memcache client on haxe",
+    "version": "1.0.0",
+    "releasenote": "Initial release",
+    "contributors":["constnw"],
+    "dependencies": {
+        "exception": ""
+    }
+  }
+  

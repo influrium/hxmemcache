@@ -1,0 +1,35 @@
+language: haxe
+sudo: true
+
+haxe:
+- development
+- stable
+
+before_install:
+#install php 7.2 on ubuntu trusty
+- sudo add-apt-repository ppa:ondrej/php -y
+- sudo apt-get update
+- sudo apt-get install -y php7.2
+- sudo apt-get install -y php7.2-mbstring
+- sudo apt-get install -y memcached
+# haxe libraries
+- haxelib install all --always
+- haxelib install hxcpp
+
+services:
+  - memcached
+
+install:
+- haxelib dev hxmemcache .
+
+script:
+- haxe test-neko.hxml
+- neko bin/test.n memcached://127.0.0.1
+# - haxe test-hl.hxml
+# - hl bin/test.hl memcached://127.0.0.1
+- haxe test-python.hxml
+- python bin/main.py memcached://127.0.0.1
+- haxe test-php.hxml
+- php bin/php/index.php memcached://127.0.0.1
+- haxe test-cpp.hxml
+- bin/cpp/Main-debug memcached://127.0.0.1

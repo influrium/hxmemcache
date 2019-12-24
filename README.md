@@ -1,2 +1,9 @@
 # hxmemcache
- Memcache client in pure Haxe
+Memcache client library on Haxe
+
+
+## PHP target
+Need extensions:
+- mbstring
+- socket
+
