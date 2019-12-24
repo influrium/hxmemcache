@@ -27,8 +27,8 @@ script:
 # - haxe test-hl.hxml
 # - hl bin/test.hl memcached://127.0.0.1
 - haxe test-python.hxml
-- python bin/main.py memcached://127.0.0.1
+- python3 bin/main.py memcached://127.0.0.1
 - haxe test-php.hxml
 - php bin/php/index.php memcached://127.0.0.1
 - haxe test-cpp.hxml
-- bin/cpp/Main-debug memcached://127.0.0.1
+- bin/cpp/Main memcached://127.0.0.1
