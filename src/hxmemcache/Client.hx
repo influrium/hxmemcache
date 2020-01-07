@@ -60,7 +60,7 @@ class Client
         this.socket = null;
     }
 
-    public function checkKey( key : String )
+    public function checkKey( key : String ) : String
     {
         return checkKeyRules(key, options.allow_unicode_keys, options.key_prefix);
     }
@@ -125,7 +125,7 @@ class Client
 
         return [for(k=>v in result.keyValueIterator()) if(!v) k];
     }
-    inline public function setMulti( values : StringMap<Dynamic>, expire : Int = 0, ?noreply : Bool, ?flags : Int ) : Array<String>
+    public function setMulti( values : StringMap<Dynamic>, expire : Int = 0, ?noreply : Bool, ?flags : Int ) : Array<String>
         return setMany(values, expire, noreply, flags);
 
     /**
@@ -205,7 +205,7 @@ class Client
             return new StringMap();
         return fetchCmd('get', keys, false);
     }
-    inline public function getMulti( keys : Array<String> ) : StringMap<Dynamic> return getMany(keys);
+    public function getMulti( keys : Array<String> ) : StringMap<Dynamic> return getMany(keys);
 
     /**
      * A tuple of (value, cas) or (default, cas_defaults) if the key was not found.
@@ -265,7 +265,7 @@ class Client
         miscCmd(cmds, 'delete', noreply);
         return true;
     }
-    inline public function deleteMulti( keys : Array<String>, ?noreply : Bool ) : Bool return deleteMany(keys, noreply);
+    public function deleteMulti( keys : Array<String>, ?noreply : Bool ) : Bool return deleteMany(keys, noreply);
 
     /**
      * Returns:
@@ -358,7 +358,7 @@ class Client
 
         return noreply ? true : results[0] == 'OK';
     }
-    inline public function flushAll( delay : Int = 0, ?noreply : Bool ) : Bool return flush(delay, noreply);
+    public function flushAll( delay : Int = 0, ?noreply : Bool ) : Bool return flush(delay, noreply);
 
     /**
      * The memcached "quit" command. 

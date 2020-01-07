@@ -4,6 +4,7 @@ import utest.ui.Report;
 
 import cases.*;
 import hxmemcache.Client;
+import hxmemcache.PooledClient;
 
 
 class Main
@@ -49,11 +50,14 @@ class Main
         runner.addCase(new PrefixedClientTest());
         runner.addCase(new SerdeTest());
         runner.addCase(new ErrorTest());
+        runner.addCase(new PooledClientTest());
+        runner.addCase(new PrefixedPooledClientTest());
 
         Report.create(runner);
         runner.run();
     }
 
-    public static function makeClient( ?options : ClientOptions ) : Client return new Client(params.host, params.port, options);
-    public static function makeCustomizedClient( ?options : ClientOptions ) : Client return new mock.CustomizedClient(params.host, params.port, options);
+    public static function makeClient( ?options : ClientOptions ) return new Client(params.host, params.port, options);
+    public static function makePooledClient( ?options : PooledClientOptions ) return new PooledClient(params.host, params.port, options);
+    public static function makeCustomizedClient( ?options : ClientOptions ) return new mock.CustomizedClient(params.host, params.port, options);
 }
