@@ -12,6 +12,9 @@ import hxmemcache.serde.*;
 using hxmemcache.Client;
 
 typedef ClientOptions = {
+    var ?username : String;
+    var ?password : String;
+    var ?memcachier_auth : Bool;
     var ?serde : Serde;
     var ?connect_timeout : Float; //Seconds
     var ?timeout : Float; //Seconds
@@ -28,6 +31,7 @@ typedef ClientOptions = {
 class Client
 {
     static var optionsDefault : ClientOptions = {
+        memcachier_auth: false,
         serde: new HaxeSerde(),
         no_delay: false,
         ignore_exc: false,
@@ -81,11 +85,26 @@ class Client
         }
         catch (e : Dynamic)
         {
+            socket.close();
             throw Exception.wrapWithStack(e);
         }
 
         this.socket = socket;
+
+        authenticate(options.username, options.password);
     }
+
+    function authenticate( username : String, password : String ) : Void
+    {
+        if (username == null || password == null)
+            return;
+        
+        if (options.memcachier_auth)
+            set(username, password);
+        else
+            set('authentication', '$username $password');
+    }
+
 
     /**
      * Close the connection to memcached, if it is open.

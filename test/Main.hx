@@ -25,7 +25,7 @@ class Main
         };
 
         var arg = Sys.args()[0];
-        if (arg.indexOf("memcached://") == 0)
+        if (arg != null && arg.indexOf("memcached://") == 0)
         {
             var reg = ~/^([^:]+):\/\/(([^:]+):([^@]*?)@)?([^:\/]+)(:([0-9]+))?\/?$/;
 
@@ -59,9 +59,27 @@ class Main
         runner.run();
     }
 
-    public static function makeClient( ?options : ClientOptions ) return new Client(params.host, params.port, options);
-    public static function makeCustomizedClient( ?options : ClientOptions ) return new mock.CustomizedClient(params.host, params.port, options);
+    public static function makeClient( ?options : ClientOptions )
+    {
+        if (options == null) options = {};
+        if (params.user != null) options.username = params.user;
+        if (params.pass != null) options.password = params.pass;
+        return new Client(params.host, params.port, options);
+    }
+    public static function makeCustomizedClient( ?options : ClientOptions )
+    {
+        if (options == null) options = {};
+        if (params.user != null) options.username = params.user;
+        if (params.pass != null) options.password = params.pass;
+        return new mock.CustomizedClient(params.host, params.port, options);
+    }
 #if target.threaded
-    public static function makePooledClient( ?options : PooledClientOptions ) return new PooledClient(params.host, params.port, options);
+    public static function makePooledClient( ?options : PooledClientOptions )
+    {
+        if (options == null) options = {};
+        if (params.user != null) options.username = params.user;
+        if (params.pass != null) options.password = params.pass;
+        return new PooledClient(params.host, params.port, options);
+    }
 #end
 }
