@@ -27,6 +27,10 @@ typedef ClientOptions = {
     var ?encoding : String;
 };
 
+typedef Server = {
+    var host : Host;
+    var port : Int;
+};
 
 class Client
 {
@@ -48,19 +52,21 @@ class Client
     var options : ClientOptions;
     var socket : Socket;
 
+    public var server (get, never) : Server;
+
     public function new( host : Host, port : Int, ?options : ClientOptions )
     {
         this.host = host;
         this.port = port;
 
-        options = options != null ? Reflect.copy(options) : {};
+        var opts = options != null ? Reflect.copy(options) : {};
         for (f in Reflect.fields(optionsDefault))
         {
-            var v = Reflect.field(options, f);
+            var v = Reflect.field(opts, f);
             if (v == null)
-                Reflect.setField(options, f, Reflect.field(optionsDefault, f));
+                Reflect.setField(opts, f, Reflect.field(optionsDefault, f));
         }
-        this.options = options;
+        this.options = opts;
         this.socket = null;
     }
 
@@ -69,7 +75,15 @@ class Client
         return checkKeyRules(key, options.allow_unicode_keys, options.key_prefix);
     }
 
-    public function connect( )
+    function get_server( ) : Server
+    {
+        return {
+            host: host,
+            port: port
+        };
+    }
+
+    function connect( )
     {
         close();
 
@@ -429,7 +443,6 @@ class Client
         
         try
         {
-            // trace(cmds.join(''));
             socket.output.writeString(cmds.join(''));
             if (noreply)
                 return [for(k in keys) k => true];
@@ -438,7 +451,6 @@ class Client
             for (key in keys)
             {
                 var line = socket.input.readLine();
-                // trace(line);
                 throwErrors(line, name);
 
                 if (name == 'cas') switch (line)
@@ -491,14 +503,12 @@ class Client
             if (socket == null)
                 connect();
             
-            // trace(cmd);
             socket.output.writeString(cmd);
 
             var result = new StringMap();
             while (true)
             {
                 var line = socket.input.readLine();
-                // trace(line);
                 throwErrors(line, name);
 
                 if (line == 'END' || line == 'OK')

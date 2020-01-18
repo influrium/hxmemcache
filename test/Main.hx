@@ -4,6 +4,7 @@ import utest.ui.Report;
 
 import cases.*;
 import hxmemcache.Client;
+import hxmemcache.HashClient;
 #if target.threaded
 import hxmemcache.PooledClient;
 #end
@@ -55,6 +56,8 @@ class Main
         runner.addCase(new PooledClientTest());
         runner.addCase(new PrefixedPooledClientTest());
 #end
+        runner.addCase(new HashClientTest());
+
         Report.create(runner);
         runner.run();
     }
@@ -82,4 +85,18 @@ class Main
         return new PooledClient(params.host, params.port, options);
     }
 #end
+    public static function makeHashClient( num : Int = 5, ?options : HashClientOptions )
+    {
+        if (options == null) options = {};
+        if (params.user != null) options.username = params.user;
+        if (params.pass != null) options.password = params.pass;
+        
+        var servers = [];
+        for (i in 0...num) servers.push({
+            host: params.host,
+            port: params.port
+        });
+        
+        return new HashClient(servers, options);
+    }
 }

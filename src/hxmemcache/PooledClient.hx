@@ -32,18 +32,8 @@ typedef PooledClientOptions = ClientOptions & {
 class PooledClient extends Client
 {
     static var optionsDefault : PooledClientOptions = {
-        serde: new HaxeSerde(),
-        no_delay: false,
-        ignore_exc: false,
-        // ssl_socket: false,
-        key_prefix: '',
-        default_noreply: true,
-        allow_unicode_keys: false,
-        encoding: 'ascii',
-    };
 
-    // var host : Host;
-    // var port : Int;
+    };
 
     var poptions : PooledClientOptions;
 
@@ -53,8 +43,14 @@ class PooledClient extends Client
     {
         super(host, port, options);
 
-        this.poptions = options != null ? options : {};
-
+        var opts = options != null ? options : {};
+        for (f in Reflect.fields(optionsDefault))
+        {
+            var v = Reflect.field(opts, f);
+            if (v == null)
+                Reflect.setField(opts, f, Reflect.field(optionsDefault, f));
+        }
+        this.poptions = opts;
         this.clientPool = new ObjectPool(createClient, afterRemove, poptions.max_pool_size, poptions.lock_generator);
     }
 
@@ -70,11 +66,6 @@ class PooledClient extends Client
     function afterRemove( client : Client ) : Void
     {
         client.close();
-    }
-
-    override public function checkKey( key : String ) : String
-    {
-        return Client.checkKeyRules(key, options.allow_unicode_keys, options.key_prefix);
     }
 
     override public function close( ) : Void
@@ -93,7 +84,12 @@ class PooledClient extends Client
     }
     override public function setMulti( values : StringMap<Dynamic>, expire : Int = 0, ?noreply : Bool, ?flags : Int ) : Array<String>
         return setMany(values, expire, noreply, flags);
-    
+
+    override public function add( key : String, value : Dynamic, expire : Int = 0, ?noreply : Bool, ?flags : Int ) : Bool
+    {
+        return clientPool.get_and_release(client -> client.add(key, value, expire, noreply, flags), true);
+    }
+
     override public function replace( key : String, value : Dynamic, expire : Int = 0, ?noreply : Bool, ?flags : Int ) : Bool
     {
         return clientPool.get_and_release(client -> client.replace(key, value, expire, noreply, flags), true);
@@ -209,11 +205,6 @@ class PooledClient extends Client
     }
     override public function deleteMulti( keys : Array<String>, ?noreply : Bool ) : Bool return deleteMany(keys, noreply);
 
-    override public function add( key : String, value : Dynamic, expire : Int = 0, ?noreply : Bool, ?flags : Int ) : Bool
-    {
-        return clientPool.get_and_release(client -> client.add(key, value, expire, noreply, flags), true);
-    }
-
     override public function incr( key : String, value : Int, noreply : Bool = false ) : Null<Int>
     {
         return clientPool.get_and_release(client -> client.incr(key, value, noreply), true);
@@ -247,6 +238,25 @@ class PooledClient extends Client
             }
         }
         return out;
+    }
+
+    override public function cacheMemLimit( memlimit : Int ) : Bool
+    {
+        var client = clientPool.get();
+        try
+        {
+            client.cacheMemLimit(memlimit);
+            clientPool.release(client);
+        }
+        catch (e : Dynamic)
+        {
+            if (!options.ignore_exc)
+            {
+                clientPool.destroy(client);
+                throw Exception.wrapWithStack(e);
+            }
+        }
+        return true;
     }
 
     override public function version( ) : String
