@@ -44,7 +44,7 @@ install:
 - haxelib install utest
 - haxelib dev hxmemcache .
 - haxelib list
-- sudo memcached --version
+- sudo memcached -V
 - java --version
 
 script:
