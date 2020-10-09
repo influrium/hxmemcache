@@ -44,8 +44,8 @@ install:
 - haxelib install utest
 - haxelib dev hxmemcache .
 - haxelib list
+- memcached --version
 - java --version
-
 
 script:
 - haxe test-neko.hxml   && neko bin/test.n memcached://127.0.0.1

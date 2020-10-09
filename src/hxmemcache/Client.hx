@@ -385,7 +385,7 @@ class Client
         noreply = noreply != null ? noreply : options.default_noreply;
 
         var delays = checkInt(delay, 'delay');
-        var cmd = 'flush_all ' + delays + (noreply ? ' noreply' : '') + '\r\n';
+        var cmd = 'flush_all $delays ${noreply ? "noreply" : ""}\r\n';
         
         var results = miscCmd([cmd], 'flush_all', noreply);
 

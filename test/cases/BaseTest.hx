@@ -154,7 +154,7 @@ class BaseTest extends Test
         client.flush();
 
         // unit test for encoding passed in __init__()
-        var client = makeClient({encoding: 'utf-8'});
+        var client = makeClient(['STORED\r', '\n'], {encoding: 'utf-8'});
         var result = client.add('key', 'value', false);
         Assert.isTrue(result);
     }
@@ -165,6 +165,8 @@ class BaseTest extends Test
         client.add('key', 'value', false);
         var result = client.add('key', 'value', false);
         Assert.isFalse(result);
+
+        client.flush();
 
         // unit test for encoding passed in __init__()
         var client = makeClient({encoding: 'utf-8'});
