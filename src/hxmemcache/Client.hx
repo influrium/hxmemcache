@@ -97,10 +97,10 @@ class Client
             if (options.timeout != null) socket.setTimeout(options.timeout);
             socket.setFastSend(options.no_delay);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             socket.close();
-            throw Exception.wrapWithStack(e);
+            throw e;
         }
 
         this.socket = socket;
@@ -470,15 +470,10 @@ class Client
 
             return results;
         }
-        catch (e : haxe.Exception)
+        catch (e : Exception)
         {
             close();
             throw e;
-        }
-        catch (e : Dynamic)
-        {
-            close();
-            throw Exception.wrapWithStack(e);
         }
 
         return null;
@@ -541,12 +536,6 @@ class Client
             if (!options.ignore_exc)
                 throw e;
         }
-        catch (e : Dynamic)
-        {
-            close();
-            if (!options.ignore_exc)
-                throw Exception.wrapWithStack(e);
-        }
 
         return new StringMap();
     }
@@ -576,11 +565,6 @@ class Client
         {
             close();
             throw e;
-        }
-        catch (e : Dynamic)
-        {
-            close();
-            throw Exception.wrapWithStack(e);
         }
 
         return null;

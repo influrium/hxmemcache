@@ -1,12 +1,12 @@
 package hxmemcache;
 
 import haxe.Exception;
-import hxmemcache.Exception;
 import haxe.Timer;
 import haxe.ds.StringMap;
 import sys.net.Host;
 import hxmemcache.hash.*;
 import hxmemcache.Client;
+import hxmemcache.Exception;
 
 #if target.threaded
 import hxmemcache.PooledClient;
@@ -187,22 +187,18 @@ class HashClient extends Client
             // Reading from the server fail, we should enter retry mode
             markFailedServer(client.server);
             
-            exc = Exception.wrapWithStack(e);
+            exc = new Exception("Reading from the server fail, we should enter retry mode", e);
         }
         catch (e: haxe.io.Error)
         {
             // Connecting to the server fail, we should enter retry mode
             markFailedServer(client.server);
             
-            exc = Exception.wrapWithStack(e);
+            exc = new Exception("Connecting to the server fail, we should enter retry mode", e);
         }
         catch (e: Exception)
         {
             exc = e;
-        }
-        catch (e: Dynamic)
-        {
-            exc = Exception.wrapWithStack(e);
         }
 
         // any exceptions we need to handle gracefully as well
