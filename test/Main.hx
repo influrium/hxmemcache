@@ -62,12 +62,12 @@ class Main
         runner.run();
     }
 
-    public static function makeClient( ?options : ClientOptions )
+    public static function makeClient( ?values : Array<String>, ?options : ClientOptions )
     {
         if (options == null) options = {};
         if (params.user != null) options.username = params.user;
         if (params.pass != null) options.password = params.pass;
-        return new Client(params.host, params.port, options);
+        return values != null ? new mock.Client(values, params.host, params.port, options) : new Client(params.host, params.port, options);
     }
     public static function makeCustomizedClient( ?options : ClientOptions )
     {

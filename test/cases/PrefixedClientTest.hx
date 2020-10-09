@@ -5,7 +5,7 @@ import hxmemcache.Client;
 
 class PrefixedClientTest extends BaseTest
 {
-    override function makeClient( ?options : ClientOptions ) : Client
+    override function makeClient( ?values : Array<String>, ?options : ClientOptions ) : Client
     {
         if (options == null)
             options = {};

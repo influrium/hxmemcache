@@ -4,7 +4,7 @@ import hxmemcache.Client;
 
 class PrefixedPooledClientTest extends PrefixedClientTest
 {
-    override function makeClient( ?options : ClientOptions )
+    override function makeClient( ?values : Array<String>, ?options : ClientOptions )
     {
         if (options == null)
             options = {};

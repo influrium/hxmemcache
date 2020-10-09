@@ -14,12 +14,12 @@ class BaseTest extends Test
 {
     var mainClient : Client;
 
-    function makeClient( ?options : ClientOptions ) : Client
+    function makeClient( ?values : Array<String>, ?options : ClientOptions ) : Client
     {
-        return Main.makeClient(options);
+        return Main.makeClient(values, options);
     }
 
-    function makeCustomizedClient( ?options : ClientOptions ) : Client
+    function makeCustomizedClient( ?values : Array<String>, ?options : ClientOptions ) : Client
     {
         return Main.makeCustomizedClient(options);
     }
@@ -38,24 +38,24 @@ class BaseTest extends Test
 
     function test_set_success( )
     {
-        var client = makeClient();
+        var client = makeClient(['STORED\r\n']);
         var result = client.set('key', 'value', false);
         Assert.isTrue(result);
 
         // unit test for encoding passed in __init__()
-        var client = makeClient({encoding: 'utf-8'});
+        var client = makeClient(['STORED\r\n'], {encoding: 'utf-8'});
         var result = client.set('key', 'value', false);
         Assert.isTrue(result);
 
         // unit test for set operation with parameter flags
-        var client = makeClient({encoding: 'utf-8'});
+        var client = makeClient(['STORED\r\n'], {encoding: 'utf-8'});
         var result = client.set('key', 'value', false, 0x00000030);
         Assert.isTrue(result);
     }
 
     function test_set_unicode_key( )
     {
-        var client = makeClient();
+        var client = makeClient(['STORED\r\n']);
         Assert.raises(function(){
             client.set('\u1f18e', 'value', false);
         }, MemcacheIllegalInputError);
@@ -63,21 +63,21 @@ class BaseTest extends Test
 
     function test_set_unicode_key_ok( )
     {
-        var client = makeClient({allow_unicode_keys: true});
+        var client = makeClient(['STORED\r\n'], {allow_unicode_keys: true});
         var result = client.set('\u1f18e', 'value', false);
         Assert.isTrue(result);
     }
 
     function test_set_unicode_key_ok_snowman( )
     {
-        var client = makeClient({allow_unicode_keys: true});
+        var client = makeClient(['STORED\r\n'], {allow_unicode_keys: true});
         var result = client.set('my☃', 'value', false);
         Assert.isTrue(result);
     }
 
     function test_set_unicode_char_in_middle_of_key( )
     {
-        var client = makeClient();
+        var client = makeClient(['STORED\r\n']);
         Assert.raises(function(){
             client.set('helloworld_\u00b1901520_%c3', 'value', false);
         }, MemcacheIllegalInputError);
@@ -85,7 +85,7 @@ class BaseTest extends Test
 
     function test_set_unicode_char_in_middle_of_key_snowman( )
     {
-        var client = makeClient();
+        var client = makeClient(['STORED\r\n']);
         Assert.raises(function(){
             client.set('my☃', 'value', false);
         }, MemcacheIllegalInputError);
@@ -93,7 +93,7 @@ class BaseTest extends Test
 
     function test_set_unicode_char_in_middle_of_key_ok( )
     {
-        var client = makeClient({allow_unicode_keys: true});
+        var client = makeClient(['STORED\r\n'], {allow_unicode_keys: true});
         var result = client.set('helloworld_\u00b1901520_%c3', 'value', false);
         Assert.isTrue(result);
     }
@@ -147,7 +147,7 @@ class BaseTest extends Test
 
     function test_add_stored( )
     {
-        var client = makeClient();
+        var client = makeClient(['STORED\r', '\n']);
         var result = client.add('key', 'value', false);
         Assert.isTrue(result);
 
