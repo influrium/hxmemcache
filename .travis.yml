@@ -8,7 +8,7 @@ haxe:
   - development
   - stable
 
-matrix:
+jobs:
   # Allow Haxe development to fail.
   allow_failures:
     - haxe: development
