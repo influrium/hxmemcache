@@ -5,8 +5,8 @@
     "classPath": "src",
     "tags":["db","memcache","client"],
     "description": "memcache client on haxe",
-    "version": "1.2.0",
-    "releasenote": "Added a client for communicating with a cluster of memcached servers",
+    "version": "1.2.1",
+    "releasenote": "update for proper working with haxe.Exception, updated README, added new targets",
     "contributors":["constnw"],
     "dependencies": {
         "exception": ""
