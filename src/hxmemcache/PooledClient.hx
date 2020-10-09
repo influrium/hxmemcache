@@ -119,12 +119,12 @@ class PooledClient extends Client
             out = client.get(key, def);
             clientPool.release(client);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             if (!options.ignore_exc)
             {
                 clientPool.destroy(client);
-                throw Exception.wrapWithStack(e);
+                throw e;
             }
         }
         return out;
@@ -139,12 +139,12 @@ class PooledClient extends Client
             out = client.getMany(keys);
             clientPool.release(client);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             if (!options.ignore_exc)
             {
                 clientPool.destroy(client);
-                throw Exception.wrapWithStack(e);
+                throw e;
             }
         }
         return out;
@@ -163,12 +163,12 @@ class PooledClient extends Client
             out = client.gets(key, def, cas_def);
             clientPool.release(client);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             if (!options.ignore_exc)
             {
                 clientPool.destroy(client);
-                throw Exception.wrapWithStack(e);
+                throw e;
             }
         }
         return out;
@@ -183,12 +183,12 @@ class PooledClient extends Client
             out = client.getsMany(keys);
             clientPool.release(client);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             if (!options.ignore_exc)
             {
                 clientPool.destroy(client);
-                throw Exception.wrapWithStack(e);
+                throw e;
             }
         }
         return out;
@@ -229,12 +229,12 @@ class PooledClient extends Client
             out = client.stats(args);
             clientPool.release(client);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             if (!options.ignore_exc)
             {
                 clientPool.destroy(client);
-                throw Exception.wrapWithStack(e);
+                throw e;
             }
         }
         return out;
@@ -248,12 +248,12 @@ class PooledClient extends Client
             client.cacheMemLimit(memlimit);
             clientPool.release(client);
         }
-        catch (e : Dynamic)
+        catch (e : Exception)
         {
             if (!options.ignore_exc)
             {
                 clientPool.destroy(client);
-                throw Exception.wrapWithStack(e);
+                throw e;
             }
         }
         return true;

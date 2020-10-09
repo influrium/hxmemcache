@@ -30,7 +30,6 @@ class ObjectPool<T>
     public function get_and_release<A>( cb : T->A, ?destroy_on_fail : Bool = false ) : A
     {
         var obj = get();
-        var exc = null;
         try
         {
             var out = cb(obj);
@@ -39,19 +38,14 @@ class ObjectPool<T>
         }
         catch( e : Exception )
         {
-            exc = e;
-        }
-        catch( e : Dynamic )
-        {
-            exc = Exception.wrapWithStack(e);
+            if (destroy_on_fail)
+                release(obj);
+            else
+                destroy(obj);
+
+            throw e;
         }
 
-        if (destroy_on_fail)
-            release(obj);
-        else
-            destroy(obj);
-        
-        throw exc;
         return null;
     }
 

@@ -15,6 +15,7 @@ class ClientTest extends BaseTest
     function test_append_stored( )
     {
         var client = makeClient();
+        
         client.set('key', 'value');
         var result = client.append('key', 'value', false);
         Assert.isTrue(result);
