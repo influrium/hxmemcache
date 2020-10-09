@@ -2,7 +2,6 @@
 # -lib hxmemcache
 -cp src
 -lib utest
--lib exception
 -dce full
 -D analyzer-optimize
 -main Main

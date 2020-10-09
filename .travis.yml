@@ -1,35 +1,56 @@
 language: haxe
-dist: xenial
+
 os: linux
 
-haxe:
-- development
-- stable
+dist: bionic
 
-before_install:
-#install php 7.2 on ubuntu trusty
-- sudo add-apt-repository ppa:ondrej/php -y
-- sudo apt-get update
-- sudo apt-get install -y php7.2
-- sudo apt-get install -y php7.2-mbstring
-# haxe libraries
-- haxelib install all --always
-- haxelib install hxcpp
+haxe:
+  - development
+  - stable
+
+matrix:
+  # Allow Haxe development to fail.
+  allow_failures:
+    - haxe: development
+
+addons:
+  apt:
+    packages:
+      # C++ (for rebuilding hxcpp)
+      - gcc-multilib
+      - g++-multilib
+      # Python
+      - python3
+      # PHP
+      - php-cli
+      - php-mbstring
 
 services:
   - memcached
 
 install:
+# haxe libraries
+# - haxelib install all --always
+- if [ "${TRAVIS_HAXE_VERSION}" = "development" ]; then
+    haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git;
+    pushd $(haxelib path hxcpp | head -1);
+      pushd tools/hxcpp; haxe compile.hxml; popd;
+      pushd project; neko build.n; popd;
+    popd;
+  else
+    haxelib install hxcpp;
+  fi
+- haxelib install hxjava
+- haxelib install utest
 - haxelib dev hxmemcache .
+- haxelib list
+
 
 script:
-- haxe test-neko.hxml
-- neko bin/test.n memcached://127.0.0.1
-# - haxe test-hl.hxml
-# - hl bin/test.hl memcached://127.0.0.1
-- haxe test-python.hxml
-- python3 bin/main.py memcached://127.0.0.1
-- haxe test-php.hxml
-- php bin/php/index.php memcached://127.0.0.1
-- haxe test-cpp.hxml
-- bin/cpp/Main memcached://127.0.0.1
+- haxe test-neko.hxml   && neko bin/test.n memcached://127.0.0.1
+- haxe test-hl.hxml     # && hl bin/test.hl memcached://127.0.0.1
+- haxe test-python.hxml && python3 bin/main.py memcached://127.0.0.1
+- haxe test-php.hxml    && php bin/php/index.php memcached://127.0.0.1
+- haxe test-cpp.hxml    && bin/cpp/Main memcached://127.0.0.1
+- haxe test-java.html   && java -jar bin/java/Main.jar memcached://127.0.0.1
+- haxe test-jvm.html    && java -jar bin/test.jar memcached://127.0.0.1

@@ -1,0 +1,2 @@
+test-common.hxml
+--jvm bin/test.jar
