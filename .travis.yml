@@ -53,5 +53,5 @@ script:
 - haxe test-python.hxml && python3 bin/main.py memcached://127.0.0.1
 - haxe test-php.hxml    && php bin/php/index.php memcached://127.0.0.1
 - haxe test-cpp.hxml    && bin/cpp/Main memcached://127.0.0.1
-- haxe test-java.hxml   && java -jar bin/java/Main.jar memcached://127.0.0.1
-- haxe test-jvm.hxml    && java -jar bin/test.jar memcached://127.0.0.1
+- haxe test-java.hxml   # && java -jar bin/java/Main.jar memcached://127.0.0.1
+- haxe test-jvm.hxml    # && java -jar bin/test.jar memcached://127.0.0.1

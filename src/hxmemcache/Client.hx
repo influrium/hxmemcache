@@ -440,7 +440,6 @@ class Client
         
         try
         {
-            trace(cmds.join(''));
             socket.output.writeString(cmds.join(''));
             if (noreply)
                 return [for(k in keys) k => true];
@@ -449,7 +448,6 @@ class Client
             for (key in keys)
             {
                 var line = socket.input.readLine();
-                trace(line);
                 throwErrors(line, name);
 
                 if (name == 'cas') switch (line)
@@ -546,7 +544,6 @@ class Client
         
         try
         {
-            trace(cmds.join(''));
             socket.output.writeString(cmds.join(''));
 
             if (noreply)
