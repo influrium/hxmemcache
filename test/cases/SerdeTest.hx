@@ -34,7 +34,7 @@ class SerdeTest extends Test
 class JsonSerde extends HaxeSerde
 {
     override function serializeValue(key:String, value:Dynamic):String {
-        return haxe.Json.stringify(value);
+        return Json.stringify(value);
     }
 
     override function deserializeValue(key:String, value:String, flags:Int) {

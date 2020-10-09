@@ -500,7 +500,7 @@ class Client
             
             socket.output.writeString(cmd);
 
-            var result = new StringMap();
+            var result : StringMap<Dynamic> = new StringMap();
             while (true)
             {
                 var line = socket.input.readLine();
