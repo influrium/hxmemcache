@@ -546,6 +546,7 @@ class Client
         
         try
         {
+            trace(cmds.join(''));
             socket.output.writeString(cmds.join(''));
 
             if (noreply)
