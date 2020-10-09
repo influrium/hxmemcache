@@ -10,6 +10,7 @@ Memcache client library on Haxe
 - python
 - cpp
 - java
+- jvm
 
 All targets are tested [![Build Status](https://travis-ci.org/influrium/hxmemcache.svg?branch=master)](https://travis-ci.org/influrium/hxmemcache)
 
