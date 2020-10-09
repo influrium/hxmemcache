@@ -147,9 +147,11 @@ class BaseTest extends Test
 
     function test_add_stored( )
     {
+        trace('test_add_stored - start');
+
         var client = makeClient(['STORED\r', '\n']);
         var result = client.add('key', 'value', false);
-        trace(Type.typeof(result), result);
+
         Assert.isTrue(result);
 
         client.flush();
@@ -157,16 +159,18 @@ class BaseTest extends Test
         // unit test for encoding passed in __init__()
         var client = makeClient(['STORED\r', '\n'], {encoding: 'utf-8'});
         var result = client.add('key', 'value', false);
-        trace(Type.typeof(result), result);
+
         Assert.isTrue(result);
+        trace('test_add_stored - finish');
     }
 
     function test_add_not_stored( )
     {
+        trace('test_add_not_stored - start');
         var client = makeClient();
         client.add('key', 'value', false);
         var result = client.add('key', 'value', false);
-        trace(Type.typeof(result), result);
+
         Assert.isFalse(result);
 
         client.flush();
@@ -175,8 +179,9 @@ class BaseTest extends Test
         var client = makeClient({encoding: 'utf-8'});
         client.add('key', 'value', false);
         var result = client.add('key', 'value', false);
-        trace(Type.typeof(result), result);
+
         Assert.isFalse(result);
+        trace('test_add_not_stored - finish');
     }
 
 

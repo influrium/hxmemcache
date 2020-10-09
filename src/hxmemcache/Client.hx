@@ -429,12 +429,9 @@ class Client
             if (flags != null)
                 serval.flags = flags;
             
-            cmds.push(name + ' ' + key + ' '
-                + Std.string(serval.flags) + ' '
-                + expires + ' '
-                + Std.string(serval.value.length) + ' '
-                + extra + '\r\n'
-                + serval.value + '\r\n'
+            cmds.push(
+                '$name $key ${Std.string(serval.flags)} $expires ${Std.string(serval.value.length)} $extra\r\n' +
+                '${serval.value}\r\n'
             );
         }
 
@@ -443,6 +440,7 @@ class Client
         
         try
         {
+            trace(cmds.join(''));
             socket.output.writeString(cmds.join(''));
             if (noreply)
                 return [for(k in keys) k => true];
@@ -451,6 +449,7 @@ class Client
             for (key in keys)
             {
                 var line = socket.input.readLine();
+                trace(line);
                 throwErrors(line, name);
 
                 if (name == 'cas') switch (line)
