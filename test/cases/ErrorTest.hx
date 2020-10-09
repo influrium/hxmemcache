@@ -10,8 +10,6 @@ import utest.Assert;
 
 class ErrorTest extends Test
 {
-    var mainClient : Client;
-
     function makeClient( ?options : ClientOptions ) : Client
     {
         return Main.makeClient(options);
@@ -19,12 +17,12 @@ class ErrorTest extends Test
 
     function setupClass( )
     {
-        mainClient = makeClient();
+
     }
 
     function setup( )
     {
-        mainClient.flushAll();
+        
     }
 
     function test_key_with_ws( )

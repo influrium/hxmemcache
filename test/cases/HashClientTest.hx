@@ -8,7 +8,7 @@ import hxmemcache.Exception;
 
 class HashClientTest extends BaseTest
 {
-    override function makeClient( ?options : ClientOptions )
+    override function makeClient( ?values : Array<String>, ?options : ClientOptions )
     {
         if (options == null)
             options = {};
